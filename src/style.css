@@ -1,0 +1,23 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.game {
+    
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+canvas {
+    width: 100%;
+    position: absolute;
+    object-fit: contain;
+    background-color: black;
+    border: 1px solid gray;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}

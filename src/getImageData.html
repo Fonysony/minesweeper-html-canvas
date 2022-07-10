@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        var canvas = document.getElementById('fakeCanvas');
+        var ctx = canvas.getContext('2d');
+        var img = new Image();
+        img.src = './assets/tiledata.png';
+        var tiles = [];
+        var  imageTileNumWidth = 23;
+        var imageTileNumHeight = 21;
+
+img.onload = function(){
+  var imageWidth = img.width;
+  var imageHeight = img.height;
+  sndCanvasWidth = imageWidth/imageTileNumWidth;
+  sndCanvasHeight = imageHeight/imageTileNumHeight;
+  canvas.width = imageWidth;
+  canvas.height = imageHeight;
+  ctx.drawImage(img,0,0,imageWidth,imageHeight);
+  var sndCanvas = document.getElementById('drawCanvas');
+  sndCanvas.width=sndCanvasWidth;
+  sndCanvas.height=sndCanvasHeight;
+  var i=0;
+  var j=0;
+  var t=0;
+    for(i=0;i<imageWidth;i+=sndCanvasWidth){
+      for(j=0;j<imageHeight;j+=sndCanvasHeight){
+            var myImageData = ctx.getImageData(j,i,sndCanvasWidth,sndCanvasHeight);     
+            var ctx2 = sndCanvas.getContext("2d");
+            ctx2.putImageData(myImageData,0,0);
+            tiles.push(myImageData);
+      }
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const map = {
+      columns: 6,
+      rows: 5,
+      tiles: [1,1,1,1,1,1,
+              1,1,1,1,1,1,
+              1,1,1,1,1,1,
+              1,1,1,1,1,1,
+              1,1,1,1,1,1]
+    }
+    let mapIndex = 0;
+    for (let top = 0; top < map.rows*sndCanvasWidth; top += sndCanvasWidth) {
+        for (let left = 0; left < map.columns*sndCanvasWidth; left += sndCanvasWidth) {
+          let tileValue = map.tiles[mapIndex]-1;
+          mapIndex++;
+          if (tileValue === -1) continue;
+          ctx.putImageData(
+            tiles[tileValue],
+            left, top
+          );
+          
+        }
+    }
+};
+    });
+  </script>
+</head>
+  <body>
+    <canvas id="fakeCanvas"></canvas>
+    <canvas id="drawCanvas"></canvas>
+  </body>
+</html>
